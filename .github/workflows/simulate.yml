@@ -34,3 +34,11 @@ jobs:
         with:
           name: ptat-output
           path: ptat_output.csv
+          - name: Generate Plot
+  run: python plot_sensor.py
+
+- name: Upload Plot Artifact
+  uses: actions/upload-artifact@v4
+  with:
+    name: temp-voltage-plot
+    path: output_plot.png
