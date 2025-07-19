@@ -36,8 +36,11 @@ E_VOUT V_OUT 0 VALUE = {2.5 * V(PTAT_OUT_NODE) + V(CTAT_COL_NODE)}
 
 * --- Control block for simulation ---
 .control
-dc TEMP -40 125 5
-print V(PTAT_OUT_NODE) V(CTAT_COL_NODE) V(V_OUT)
-plot V(PTAT_OUT_NODE) V(CTAT_COL_NODE) V(V_OUT)
-wrdata ptat_output.csv V(PTAT_OUT_NODE) V(CTAT_COL_NODE) V(V_OUT)
+  set noaskquit
+  set filetype=ascii
+  set wr_singlescale
+  .dc TEMP -40 125 5
+  print TEMP v(PTAT_OUT_NODE) v(CTAT_COL_NODE) v(V_OUT)
+  wrdata ptat_output.csv TEMP v(PTAT_OUT_NODE) v(CTAT_COL_NODE) v(V_OUT)
+  quit
 .endc

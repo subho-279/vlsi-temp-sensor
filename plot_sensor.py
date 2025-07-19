@@ -1,4 +1,6 @@
 import pandas as pd
+import matplotlib
+matplotlib.use('Agg')  # Disable GUI display
 import matplotlib.pyplot as plt
 
 # Read CSV (adjust columns to match yours)
