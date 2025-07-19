@@ -53,4 +53,4 @@ def hover(event):
 fig.canvas.mpl_connect("motion_notify_event", hover)
 
 plt.tight_layout()
-plt.show()
+plt.savefig("sensor_output_plot.png")
