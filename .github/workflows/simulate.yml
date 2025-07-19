@@ -23,13 +23,13 @@ jobs:
         run: docker run --rm -v ${{ github.workspace }}:/app vlsi-sensor
 
       - name: Upload output plot
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: sensor-plot
           path: sensor_output_plot.png
 
       - name: Upload output CSV
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ptat-output
           path: ptat_output.csv
