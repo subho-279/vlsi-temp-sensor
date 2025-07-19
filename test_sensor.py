@@ -1,18 +1,17 @@
 import pandas as pd
 
 def test_voltage_range():
-    df = pd.read_csv("ptat_output.csv", sep='\s+', comment="*", header=None)
-    
-    # Print a sample of the first row to verify column layout (debug)
-    print(df.head())
+    df = pd.read_csv("ptat_output.csv", sep=r'\s+', comment="*", header=None)
 
-    # Check how many columns are present
-    assert df.shape[1] >= 4, "CSV doesn't have enough columns"
-
-    # Assign column names dynamically based on number of columns
-    df.columns = ["Temp_C", "V_PTAT", "V_CTAT", "V_OUT"][:df.shape[1]]
+    # Use only the columns we care about (every second value)
+    df_clean = pd.DataFrame({
+        "Temp_C": df[0],
+        "V_PTAT": df[1],
+        "V_CTAT": df[3],
+        "V_OUT": df[5]
+    })
 
     # Validate voltage ranges
-    assert df["V_PTAT"].between(0.4, 1.5).all(), "V_PTAT out of expected range"
-    assert df["V_CTAT"].between(0.3, 1.2).all(), "V_CTAT out of expected range"
-    assert df["V_OUT"].between(0.5, 2.0).all(), "V_OUT out of expected range"
+    assert df_clean["V_PTAT"].between(0.4, 1.5).all(), "V_PTAT out of expected range"
+    assert df_clean["V_CTAT"].between(0.3, 1.2).all(), "V_CTAT out of expected range"
+    assert df_clean["V_OUT"].between(0.5, 2.0).all(), "V_OUT out of expected range"
