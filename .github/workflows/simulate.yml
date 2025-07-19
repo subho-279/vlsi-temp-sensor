@@ -27,18 +27,17 @@ jobs:
           docker build -t vlsi-sensor .
           docker run --rm -v ${{ github.workspace }}:/app vlsi-sensor
 
-
-
       - name: Upload Output CSV
         uses: actions/upload-artifact@v4
         with:
           name: ptat-output
           path: ptat_output.csv
-          - name: Generate Plot
-  run: python plot_sensor.py
 
-- name: Upload Plot Artifact
-  uses: actions/upload-artifact@v4
-  with:
-    name: temp-voltage-plot
-    path: output_plot.png
+      - name: Generate Plot
+        run: python plot_sensor.py
+
+      - name: Upload Plot Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: temp-voltage-plot
+          path: output_plot.png
