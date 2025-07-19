@@ -1,0 +1,35 @@
+name: Run VLSI Temperature Sensor Simulation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  simulate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: docker build -t vlsi-sensor .
+
+      - name: Run simulation
+        run: docker run --rm -v ${{ github.workspace }}:/app vlsi-sensor
+
+      - name: Upload output plot
+        uses: actions/upload-artifact@v3
+        with:
+          name: sensor-plot
+          path: sensor_output_plot.png
+
+      - name: Upload output CSV
+        uses: actions/upload-artifact@v3
+        with:
+          name: ptat-output
+          path: ptat_output.csv
