@@ -1,0 +1,23 @@
+* PTAT + CTAT Temperature Sensor Simulation in Ngspice
+
+VDD N1 0 DC 1.8
+
+* Two NPN BJTs to generate PTAT voltage
+Q1 N2 N1 N1 QMOD
+Q2 N3 N1 N1 QMOD
+
+* Resistors to develop voltage difference
+R1 N2 N4 10k
+R2 N3 N4 5k
+R3 N4 0 1k
+
+* BJT model
+.model QMOD NPN (IS=1e-16 BF=100)
+
+* Sweep temperature from 0°C to 100°C in 25°C steps
+.dc TEMP 0 100 25
+
+* Print voltages at key nodes (PTAT, CTAT, and combined output)
+.print DC V(N2) V(N3) V(N4)
+
+.end

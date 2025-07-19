@@ -1,0 +1,43 @@
+* PTAT + CTAT Temperature Sensor Simulation in Ngspice
+.title BJT PTAT + CTAT Temperature Sensor
+
+* --- Global Settings ---
+.option post
+.temp 27
+
+* --- Power Supply ---
+VDD VDD 0 DC 1.8V
+
+* --- BJT Model (must come before any BJT use) ---
+.model QMOD NPN (IS=1e-16 BF=100 VAF=50)
+
+* --- PTAT Voltage Generator (Simplified Concept) ---
+* Two BJTs with area ratio 1:8 to generate ΔVbe
+
+I_PTAT_BIAS VDD N_COL1 DC 10uA
+Q_PTAT1 N_COL1 N_BASE 0 QMOD AREA=1
+Q_PTAT2 N_COL2 N_BASE 0 QMOD AREA=8
+R_PTAT N_COL1 N_COL2 100
+
+* Convert PTAT current to voltage
+R_PTAT_OUT N_COL2 PTAT_OUT_NODE 10k
+
+* --- CTAT Voltage Generator ---
+* Single diode-connected BJT biased with current
+
+I_CTAT_BIAS VDD CTAT_COL_NODE DC 10uA
+Q_CTAT CTAT_COL_NODE CTAT_COL_NODE 0 QMOD
+
+* --- Output Summing Stage ---
+* Use a voltage-controlled voltage source to sum PTAT and CTAT
+* V_OUT = a*V(PTAT) + b*V(CTAT)
+
+E_VOUT V_OUT 0 VALUE = {2.5 * V(PTAT_OUT_NODE) + V(CTAT_COL_NODE)}
+
+* --- Control block for simulation ---
+.control
+dc TEMP -40 125 5
+print V(PTAT_OUT_NODE) V(CTAT_COL_NODE) V(V_OUT)
+plot V(PTAT_OUT_NODE) V(CTAT_COL_NODE) V(V_OUT)
+wrdata ptat_output.csv V(PTAT_OUT_NODE) V(CTAT_COL_NODE) V(V_OUT)
+.endc
