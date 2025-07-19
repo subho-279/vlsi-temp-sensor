@@ -33,3 +33,14 @@ jobs:
         with:
           name: ptat-output
           path: ptat_output.csv
+
+                - name: Install test dependencies
+        run: pip install pandas pytest
+
+      - name: Run automated tests
+        run: pytest test_sensor.py
+
+              - name: Run sensor validation tests
+        run: |
+          pip install pytest pandas
+          pytest test_sensor.py
